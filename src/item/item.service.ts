@@ -13,7 +13,7 @@ export class ItemService {
     private userService: UsersService,
   ) {}
 
-  addItem = async (id: string, addItem: AddItemDto): Promise<{}> => {
+  addItem = async (id: string, addItem: AddItemDto): Promise<object> => {
     const { name, quantity, price } = addItem;
 
     const user = await this.userService.getUserById(id);
@@ -29,7 +29,7 @@ export class ItemService {
     return { msg: `Item: ${name} was added.` };
   };
 
-  getItemsByUserId = async (userId: string) => {
+  getItemsByUserId = async (userId: string): Promise<Item[]> => {
     const items = await this.itemRepo.find({
       where: { user: { id: userId } },
       relations: ['user'],

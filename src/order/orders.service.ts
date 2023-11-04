@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AddOrderDto, AddOrderItemDto } from 'src/dtos/AddOrder.dto';
+import { OrderItemDto } from 'src/dtos/AddOrder.dto';
 import { Order } from 'src/entities/Order.entity';
 import { OrderItem } from 'src/entities/OrderItem.entity';
+import { User } from 'src/entities/User.entity';
 import { ItemService } from 'src/item/item.service';
 import { UsersService } from 'src/user/users.service';
 import { Repository } from 'typeorm';
@@ -23,21 +24,46 @@ export class OrdersService {
 
   addOrder = async (
     userId: string,
-    addOrder: AddOrderItemDto[],
+    order: OrderItemDto[],
   ): Promise<{ msg: string }> => {
-    // const order_items = addOrder.map((item, quantity) => {
-    //   const orderItem = this.orderItemRepo.create({
-    //     itemId,
-    //     itemName: item,
-    //     quantity,
-    //     price: 0,
-    //     order
-    //   });
-    //   return orderItem;
-    // });
-    // console.log(order_items);
+    const user = await this.userService.getUserById(userId);
 
-    // await this.orderItemRepo.save(order_items);
+    await createOrder(order, this.orderRepo, this.orderItemRepo, user);
+
     return { msg: 'Ordered Successfully..' };
   };
 }
+
+const createOrder = async (
+  order: OrderItemDto[],
+  orderRepo: Repository<Order>,
+  orderItemRepo: Repository<OrderItem>,
+  user: User,
+): Promise<Order> => {
+  const orderItems = await createOrderItems(order, orderItemRepo);
+
+  const newOrder = orderRepo.create({
+    date: new Date(),
+    orderItem: orderItems,
+    user,
+  });
+  await orderRepo.save(newOrder);
+
+  return newOrder;
+};
+
+const createOrderItems = async (
+  order: OrderItemDto[],
+  orderItemRepo: Repository<OrderItem>,
+): Promise<OrderItem[]> => {
+  const orderItems = order.map((item) => {
+    const items = orderItemRepo.create({
+      itemName: item.itemName,
+      quantity: item.quantity,
+    });
+    return items;
+  });
+
+  await orderItemRepo.save(orderItems);
+  return orderItems;
+};

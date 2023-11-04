@@ -1,20 +1,9 @@
 import { IsNumber, IsString } from 'class-validator';
 
-export class AddOrderDto {
+export class OrderItemDto {
   @IsString()
-  item: string;
+  itemName: string;
 
   @IsNumber()
   quantity: number;
-}
-
-export class AddOrderItemDto {
-  @IsString()
-  userId: string;
-
-  @IsNumber()
-  total: number;
-
-  @IsString({ each: true })
-  items: AddOrderDto[];
 }

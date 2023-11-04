@@ -10,7 +10,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { OrdersService } from './orders.service';
-import { AddOrderDto, AddOrderItemDto } from 'src/dtos/AddOrder.dto';
+import { OrderItemDto } from 'src/dtos/AddOrder.dto';
 import { AuthGuard } from '@nestjs/passport';
 
 @UsePipes(new ValidationPipe())
@@ -27,8 +27,8 @@ export class OrdersController {
   @Post()
   addOrder(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() addOrder: AddOrderItemDto[],
+    @Body() order: OrderItemDto[],
   ) {
-    return this.orderService.addOrder(id, addOrder);
+    return this.orderService.addOrder(id, order);
   }
 }

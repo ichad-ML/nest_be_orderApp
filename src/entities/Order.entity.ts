@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   OneToOne,
@@ -14,14 +15,11 @@ export class Order {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('uuid')
-  order_id: string;
-
   @Column()
   date: Date;
 
   @OneToMany(() => OrderItem, (orderItem) => orderItem.order)
-  orderItem: OrderItem;
+  orderItem: OrderItem[];
 
   @ManyToOne(() => User, (user) => user.orders, {
     cascade: true,

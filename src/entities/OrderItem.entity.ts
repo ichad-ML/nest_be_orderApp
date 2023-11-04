@@ -6,8 +6,8 @@ export class OrderItem {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  itemId: string;
+  // @Column()
+  // itemId: string;
 
   @Column()
   itemName: string;
@@ -15,8 +15,8 @@ export class OrderItem {
   @Column()
   quantity: number;
 
-  @Column()
-  price: number;
+  // @Column()
+  // price: number;
 
   @ManyToOne(() => Order, (order) => order.orderItem, {
     cascade: true,
@@ -24,7 +24,7 @@ export class OrderItem {
   })
   order: Order;
 
-  get eactItemTotal(): number {
-    return this.quantity * this.price;
-  }
+  // get eactItemTotal(): number {
+  //   return this.quantity * this.price;
+  // }
 }
