@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AddProfileDetails } from 'src/dtos/AddProfileDetails.dto';
 import { Profile } from 'src/entities/Profile.entity';
@@ -28,7 +28,11 @@ export class ProfileService {
       user,
     });
 
-    await this.profileRepo.save(userProfile);
+    try {
+      await this.profileRepo.save(userProfile);
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+    }
 
     return {
       msg: `Username ${user.username} profile details has been updated..`,

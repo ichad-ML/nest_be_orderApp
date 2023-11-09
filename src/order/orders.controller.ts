@@ -5,6 +5,7 @@ import {
   Param,
   ParseUUIDPipe,
   Post,
+  Req,
   UseGuards,
   UsePipes,
   ValidationPipe,
@@ -12,10 +13,11 @@ import {
 import { OrdersService } from './orders.service';
 import { OrderItemDto } from 'src/dtos/AddOrder.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { CustomRequest } from 'src/middlewares/order-validation/custom-request';
 
 @UsePipes(new ValidationPipe())
 // @UseGuards(AuthGuard('jwt'))
-@Controller(':id/orders')
+@Controller('orders')
 export class OrdersController {
   constructor(private orderService: OrdersService) {}
 
@@ -26,9 +28,14 @@ export class OrdersController {
 
   @Post()
   addOrder(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Body() order: OrderItemDto[],
+    // @Param('id', ParseUUIDPipe) id: string,
+    // @Body() order: OrderItemDto[],
+    @Req() req: CustomRequest,
   ) {
-    return this.orderService.addOrder(id, order);
+    console.log('transform:', req.transformedData);
+    const order = [req.transformedData];
+    console.log(order);
+
+    return this.orderService.addOrder(order);
   }
 }

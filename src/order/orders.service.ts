@@ -23,34 +23,43 @@ export class OrdersService {
   };
 
   addOrder = async (
-    userId: string,
+    // userId: string,
     order: OrderItemDto[],
   ): Promise<{ msg: string }> => {
-    const user = await this.userService.getUserById(userId);
+    // // const user = await this.userService.getUserById(userId);
+    // console.log(order);
+    const [{ itemName, quantity }] = order;
 
-    await createOrder(order, this.orderRepo, this.orderItemRepo, user);
+    const orderItems = await createOrderItems(order, this.orderItemRepo);
+
+    const newOrder = this.orderRepo.create({
+      date: new Date(),
+      orderItem: orderItems,
+      // user,
+    });
+    // await this.orderRepo.save(newOrder);
 
     return { msg: 'Ordered Successfully..' };
   };
 }
 
-const createOrder = async (
-  order: OrderItemDto[],
-  orderRepo: Repository<Order>,
-  orderItemRepo: Repository<OrderItem>,
-  user: User,
-): Promise<Order> => {
-  const orderItems = await createOrderItems(order, orderItemRepo);
+// const createOrder = async (
+//   order: OrderItemDto[],
+//   orderRepo: Repository<Order>,
+//   orderItemRepo: Repository<OrderItem>,
+//   user: User,
+// ): Promise<Order> => {
+//   const orderItems = await createOrderItems(order, orderItemRepo);
 
-  const newOrder = orderRepo.create({
-    date: new Date(),
-    orderItem: orderItems,
-    user,
-  });
-  await orderRepo.save(newOrder);
+//   const newOrder = orderRepo.create({
+//     date: new Date(),
+//     orderItem: orderItems,
+//     user,
+//   });
+//   await orderRepo.save(newOrder);
 
-  return newOrder;
-};
+//   return newOrder;
+// };
 
 const createOrderItems = async (
   order: OrderItemDto[],

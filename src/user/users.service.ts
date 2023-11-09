@@ -6,14 +6,19 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
+import { runTransaction } from 'dbConfig/db.transaction';
 import { UpdateUserDto } from 'src/dtos/UpdateUser.dto';
 import { User } from 'src/entities/User.entity';
-import { Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectRepository(User) private userRepo: Repository<User>) {}
+  constructor(
+    @InjectRepository(User) private userRepo: Repository<User>,
+    @InjectEntityManager()
+    private readonly entityManager: EntityManager,
+  ) {}
 
   getUsers = () => {
     return this.userRepo.find();
@@ -36,11 +41,12 @@ export class UsersService {
 
     if (!foundUser) throw new NotFoundException();
 
-    try {
-      await this.userRepo.delete(foundUser);
-    } catch (error) {
-      throw new HttpException(error, HttpStatus.BAD_REQUEST);
-    }
+    await runTransaction(
+      this.entityManager,
+      async (transactionalEntityManager) => {
+        await transactionalEntityManager.delete(User, foundUser);
+      },
+    );
 
     return { msg: 'User deleted!' };
   };
