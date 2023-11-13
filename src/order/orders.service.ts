@@ -77,8 +77,8 @@ const createOrderItems = async (
 
     return items;
   });
-  console.log('orderItems:', orderItems);
+  // console.log('orderItems:', orderItems);
 
-  await orderItemRepo.save(orderItems);
+  // await orderItemRepo.save(orderItems);
   return orderItems;
 };

@@ -36,6 +36,9 @@ export class OrdersController {
     @GetUser() user: User,
   ) {
     // console.log('transform:', req.transformedData);
+    console.log(order);
+
+    console.log(user);
 
     return this.orderService.addOrder(order, user);
   }
