@@ -13,9 +13,11 @@ import {
 import { ItemService } from './item.service';
 import { AddItemDto } from 'src/dtos/AddItem.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from 'src/auth/get-user/getUser.decorator';
+import { User } from 'src/entities/User.entity';
 
 @UsePipes(new ValidationPipe())
-// @UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard('jwt'))
 @Controller('users/:userId/items')
 export class ItemController {
   constructor(private itemService: ItemService) {}
@@ -24,8 +26,9 @@ export class ItemController {
   addItem(
     @Param('userId', ParseUUIDPipe) userId: string,
     @Body() addItem: AddItemDto,
+    @GetUser() user: User,
   ) {
-    return this.itemService.addItem(userId, addItem);
+    return this.itemService.addItem(user, addItem);
   }
 
   @Get()

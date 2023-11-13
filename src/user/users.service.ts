@@ -36,7 +36,7 @@ export class UsersService {
     // this.userRepo.save(foundUser);
   };
 
-  deleteUser = async (id: string): Promise<{}> => {
+  deleteUser = async (id: string): Promise<{ msg: string }> => {
     const foundUser = await this.getUserById(id);
 
     if (!foundUser) throw new NotFoundException();

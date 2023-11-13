@@ -13,7 +13,7 @@ import { OrderItem } from './OrderItem.entity';
 @Entity()
 export class Order {
   @PrimaryGeneratedColumn()
-  id: number;
+  order_id: number;
 
   @Column()
   date: Date;

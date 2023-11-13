@@ -6,17 +6,14 @@ export class OrderItem {
   @PrimaryGeneratedColumn()
   _no: number;
 
-  // @Column()
-  // itemId: string;
-
   @Column()
   itemName: string;
 
   @Column()
   quantity: number;
 
-  // @Column()
-  // price: number;
+  @Column()
+  price: number;
 
   @ManyToOne(() => Order, (order) => order.orderItem, {
     cascade: true,
@@ -24,7 +21,10 @@ export class OrderItem {
   })
   order: Order;
 
-  // get eactItemTotal(): number {
-  //   return this.quantity * this.price;
-  // }
+  @Column()
+  subTotal: number;
+
+  get calculateTotal(): number {
+    return this.quantity * 3;
+  }
 }

@@ -11,6 +11,8 @@ import {
 } from '@nestjs/common';
 import { ProfileService } from './profile.service';
 import { AddProfileDetails } from 'src/dtos/AddProfileDetails.dto';
+import { GetUser } from 'src/auth/get-user/getUser.decorator';
+import { User } from 'src/entities/User.entity';
 
 @Controller(':id/profile')
 export class ProfileController {
@@ -21,7 +23,8 @@ export class ProfileController {
   addProfileDetails(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() addProfile: AddProfileDetails,
+    @GetUser() user: User,
   ) {
-    return this.profileService.addProfileDetails(id, addProfile);
+    return this.profileService.addProfileDetails(user, addProfile);
   }
 }

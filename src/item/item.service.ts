@@ -9,6 +9,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { AddItemDto } from 'src/dtos/AddItem.dto';
 import { Item } from 'src/entities/Item.entity';
+import { User } from 'src/entities/User.entity';
 import { UsersService } from 'src/user/users.service';
 import { Repository } from 'typeorm';
 import { v4 as uuid } from 'uuid';
@@ -21,13 +22,13 @@ export class ItemService {
   ) {}
 
   addItem = async (
-    id: string,
+    user: User,
     addItem: AddItemDto,
   ): Promise<{ msg: string }> => {
     const { name, quantity, price } = addItem;
 
     try {
-      const user = await this.userService.getUserById(id);
+      // const user = await this.userService.getUserById(id);
       const newItem = this.itemRepo.create({
         id: uuid(),
         name,
@@ -67,7 +68,7 @@ export class ItemService {
     try {
       await this.userService.getUserById(userId);
       if (userId === item.user.id) {
-        await this.itemRepo.delete(item);
+        // await this.itemRepo.delete(item);
         return { msg: 'Item deleted!..' };
       } else {
         throw new UnauthorizedException();

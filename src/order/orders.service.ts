@@ -18,26 +18,26 @@ export class OrdersService {
     private itemService: ItemService,
   ) {}
 
-  getAllOrder = () => {
-    return this.orderRepo.find();
+  getAllOrder = async (): Promise<Order[]> => {
+    const data = await this.orderRepo.find({
+      relations: ['user', 'orderItem'],
+    });
+    return data;
   };
 
   addOrder = async (
-    // userId: string,
     order: OrderItemDto[],
+    user: User,
   ): Promise<{ msg: string }> => {
-    // // const user = await this.userService.getUserById(userId);
-    // console.log(order);
-    const [{ itemName, quantity }] = order;
-
     const orderItems = await createOrderItems(order, this.orderItemRepo);
 
     const newOrder = this.orderRepo.create({
       date: new Date(),
       orderItem: orderItems,
-      // user,
+      user,
     });
-    // await this.orderRepo.save(newOrder);
+
+    await this.orderRepo.save(newOrder);
 
     return { msg: 'Ordered Successfully..' };
   };
@@ -68,10 +68,16 @@ const createOrderItems = async (
   const orderItems = order.map((item) => {
     const items = orderItemRepo.create({
       itemName: item.itemName,
+      price: item.price,
       quantity: item.quantity,
     });
+    // console.log(items.calculateTotal());
+
+    items.subTotal = items.calculateTotal;
+
     return items;
   });
+  console.log('orderItems:', orderItems);
 
   await orderItemRepo.save(orderItems);
   return orderItems;

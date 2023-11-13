@@ -36,7 +36,7 @@ export class AuthService {
       return { accessToken };
     }
 
-    throw new NotFoundException();
+    throw new NotFoundException('User not found!..');
   };
 
   // signup = async (userDetails: CreateUserDto): Promise<{ msg: string }> => {
