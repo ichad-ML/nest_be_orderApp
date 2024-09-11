@@ -25,6 +25,9 @@ export class OrdersController {
 
   @Get()
   getAllOrder() {
+    console.log('test-1');
+    console.log('test-3');
+
     return this.orderService.getAllOrder();
   }
 
@@ -36,6 +39,8 @@ export class OrdersController {
     @GetUser() user: User,
   ) {
     // console.log('transform:', req.transformedData);
+    console.log('test-2');
+    console.log('test-4');
     console.log(order);
 
     console.log(user);
