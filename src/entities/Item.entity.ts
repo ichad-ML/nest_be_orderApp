@@ -6,7 +6,7 @@ export class Item {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column() // comment 1
   name: string;
 
   @Column()
