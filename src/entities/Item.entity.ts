@@ -9,7 +9,7 @@ export class Item {
   @Column() // comment 1
   name: string;
 
-  @Column()
+  @Column() // comment 2
   quantity: number;
 
   @Column('float')
