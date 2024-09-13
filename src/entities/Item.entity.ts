@@ -6,13 +6,13 @@ export class Item {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column() // comment 1
   name: string;
 
-  @Column()
+  @Column() // comment 2
   quantity: number;
 
-  @Column('float')
+  @Column('float') // comment 3
   price: number;
 
   @ManyToOne(() => User, (user) => user.items, {
