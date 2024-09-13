@@ -25,6 +25,10 @@ export class ProfileController {
     @Body() addProfile: AddProfileDetails,
     @GetUser() user: User,
   ) {
+    console.log('tests 1');
     return this.profileService.addProfileDetails(user, addProfile);
+    console.log('tests 2');
+    console.log('tests 3');
+    console.log('tests 4');
   }
 }
