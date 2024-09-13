@@ -12,7 +12,7 @@ export class Item {
   @Column() // comment 2
   quantity: number;
 
-  @Column('float')
+  @Column('float') // comment 3
   price: number;
 
   @ManyToOne(() => User, (user) => user.items, {
